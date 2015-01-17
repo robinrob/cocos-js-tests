@@ -1,10 +1,14 @@
 .DS_Store
 .idea/
 
+# Ignore all
 /*
 
 !.gitignore
 
+# Don't ignore src
 !src/
+# Oh wait, ignore all src
 src/*
+# Don't ignore these!
 !src/GravityTest/
