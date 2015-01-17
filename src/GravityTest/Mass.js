@@ -23,8 +23,8 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-var Ball = cc.Sprite.extend({
-    _velocity:cc.p(0,0),
+var Mass = cc.Sprite.extend({
+    _velocity:cc.p(0,w0),
     _radius:0,
     radius:function () {
         return this._radius;
@@ -33,15 +33,17 @@ var Ball = cc.Sprite.extend({
         this._radius = rad;
     },
     move:function (delta) {
-	    this.x += this._wvelocity.x * delta;
-	    this.y += this._velocity.y * delta;
+	    this.x += this._velocity.x * delta;
+	    this.y -= this._velocity.y * 1000 * delta;
         var winSize = cc.director.getWinSize();
         if (this.x > winSize.width - this.radius()) {
             this.x = winSize.width - this.radius();
             this._velocity.x *= -1;
+            this._velocity.y *= -1;
         } else if (this.x < this.radius()) {
             this.x = this.radius();
-            this._velocity.x *= -1;
+            this._velocity.x *= -0.1;
+            this._velocity.y *= -0.1;
         }
     },
     collideWithPaddle:function (paddle) {
@@ -87,8 +89,8 @@ var Ball = cc.Sprite.extend({
         return this._velocity;
     }
 });
-Ball.ballWithTexture = function (texture) {
-    var ball = new Ball();
+Mass.ballWithTexture = function (texture) {
+    var ball = new Mass();
     ball.initWithTexture(texture);
     if (texture instanceof cc.Texture2D)
         ball.setRadius(texture.width / 2);

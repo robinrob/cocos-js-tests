@@ -28,7 +28,7 @@ var LOW_PLAYER = 1;
 var STATUS_BAR_HEIGHT = 20.0;
 var SPRITE_TAG = 0;
 
-var TouchesTestScene = TestScene.extend({
+var GravityTestScene = TestScene.extend({
     ctor:function () {
         this._super(true);
         var pongLayer = new PongLayer();
@@ -53,7 +53,7 @@ var PongLayer = cc.Layer.extend({
         this._ballStartingVelocity = cc.p(20.0, -100.0);
         this._winSize = cc.director.getWinSize();
 
-        this._ball = Ball.ballWithTexture(cc.textureCache.addImage(s_ball));
+        this._ball = Mass.ballWithTexture(cc.textureCache.addImage(s_ball));
         this._ball.x = this._winSize.width / 2;
         this._ball.y = this._winSize.height / 2;
         this._ball.setVelocity(this._ballStartingVelocity);
@@ -92,7 +92,7 @@ var PongLayer = cc.Layer.extend({
 
         this.schedule(this.doStep);
     },
-    resetAndScoreBallForPlayer:function (player) {
+    resetAndScoreMassForPlayer:function (player) {
         if (Math.abs(this._ball.getVelocity().y) < 300) {
             this._ballStartingVelocity = cc.pMult(this._ballStartingVelocity, -1.1);
         } else {
@@ -115,9 +115,9 @@ var PongLayer = cc.Layer.extend({
         }
 
         if (this._ball.y > this._winSize.height - STATUS_BAR_HEIGHT + this._ball.radius())
-            this.resetAndScoreBallForPlayer(LOW_PLAYER);
+            this.resetAndScoreMassForPlayer(LOW_PLAYER);
         else if (this._ball.y < -this._ball.radius())
-            this.resetAndScoreBallForPlayer(HIGH_PLAYER);
+            this.resetAndScoreMassForPlayer(HIGH_PLAYER);
         this._ball.draw();
     }
 });
