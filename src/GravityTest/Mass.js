@@ -24,7 +24,7 @@
  THE SOFTWARE.
  ****************************************************************************/
 var Mass = cc.Sprite.extend({
-    _velocity:cc.p(0,w0),
+    _velocity:cc.p(0,0),
     _radius:0,
     radius:function () {
         return this._radius;
@@ -33,18 +33,16 @@ var Mass = cc.Sprite.extend({
         this._radius = rad;
     },
     move:function (delta) {
-	    this.x += this._velocity.x * delta;
-	    this.y -= this._velocity.y * 1000 * delta;
+        this.x += this._velocity.x * delta;
+        this.y += this._velocity.y * delta;
         var winSize = cc.director.getWinSize();
         if (this.x > winSize.width - this.radius()) {
             this.x = winSize.width - this.radius();
-            this._velocity.x *= -1;
-            this._velocity.y *= -1;
         } else if (this.x < this.radius()) {
             this.x = this.radius();
-            this._velocity.x *= -0.1;
-            this._velocity.y *= -0.1;
+            this._velocity.x *= -1;
         }
+        this._velocity.y *= 0.1;
     },
     collideWithPaddle:function (paddle) {
         var paddleRect = paddle.rect();
