@@ -42,20 +42,20 @@ var Mass = cc.Sprite.extend({
             this.x = this.radius();
             this._velocity.x *= -1;
         }
-        this._velocity.y *= 0.1;
+//        this._velocity.y *= 0.1;
     },
-    collideWithPaddle:function (paddle) {
-        var paddleRect = paddle.rect();
+    collideWithPlatform:function (platform) {
+        var platformRect = platform.rect();
 
-        paddleRect.x += paddle.x;
-        paddleRect.y += paddle.y;
+        platformRect.x += platform.x;
+        platformRect.y += platform.y;
 
-        var lowY = cc.rectGetMinY(paddleRect);
-        var midY = cc.rectGetMidY(paddleRect);
-        var highY = cc.rectGetMaxY(paddleRect);
+        var lowY = cc.rectGetMinY(platformRect);
+        var midY = cc.rectGetMidY(platformRect);
+        var highY = cc.rectGetMaxY(platformRect);
 
-        var leftX = cc.rectGetMinX(paddleRect);
-        var rightX = cc.rectGetMaxX(paddleRect);
+        var leftX = cc.rectGetMinX(platformRect);
+        var rightX = cc.rectGetMaxX(platformRect);
 
         if ((this.x > leftX) && (this.x < rightX)) {
             var hit = false;
@@ -71,7 +71,7 @@ var Mass = cc.Sprite.extend({
             }
 
             if (hit) {
-                var hitAngle = cc.pToAngle(cc.p(paddle.x - this.x, paddle.y - this.y)) + angleOffset;
+                var hitAngle = cc.pToAngle(cc.p(platform.x - this.x, platform.y - this.y)) + angleOffset;
 
                 var scalarVelocity = cc.pLength(this._velocity) * 1.00000005;
                 var velocityAngle = -cc.pToAngle(this._velocity) + 0.00000005 * hitAngle;
@@ -87,12 +87,12 @@ var Mass = cc.Sprite.extend({
         return this._velocity;
     }
 });
-Mass.ballWithTexture = function (texture) {
-    var ball = new Mass();
-    ball.initWithTexture(texture);
+Mass.massWithTexture = function (texture) {
+    var mass = new Mass();
+    mass.initWithTexture(texture);
     if (texture instanceof cc.Texture2D)
-        ball.setRadius(texture.width / 2);
+        mass.setRadius(texture.width / 2);
     else if ((texture instanceof HTMLImageElement) || (texture instanceof HTMLCanvasElement))
-        ball.setRadius(texture.width / 2);
-    return ball;
+        mass.setRadius(texture.width / 2);
+    return mass;
 };

@@ -23,11 +23,11 @@
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  THE SOFTWARE.
  ****************************************************************************/
-var PADDLE_STATE_GRABBED = 0;
-var PADDLE_STATE_UNGRABBED = 1;
+var PLATFORM_STATE_GRABBED = 0;
+var PLATFORM_STATE_UNGRABBED = 1;
 
-var Paddle = cc.Sprite.extend({
-    _state:PADDLE_STATE_UNGRABBED,
+var Platform = cc.Sprite.extend({
+    _state:PLATFORM_STATE_UNGRABBED,
     _rect:null,
 
     ctor: function(){
@@ -46,10 +46,10 @@ var Paddle = cc.Sprite.extend({
     },
     initWithTexture:function (aTexture) {
         if (this._super(aTexture)) {
-            this._state = PADDLE_STATE_UNGRABBED;
+            this._state = PLATFORM_STATE_UNGRABBED;
         }
         if (aTexture instanceof cc.Texture2D) {
-            this._rect = cc.rect(0, 0, aTexture.width, aTexture.height);
+            this._rect = cc.rect(0, 0, cc.director.getWinSize(), aTexture.height);
         } else if ((aTexture instanceof HTMLImageElement) || (aTexture instanceof HTMLCanvasElement)) {
             this._rect = cc.rect(0, 0, aTexture.width, aTexture.height);
         }
@@ -67,10 +67,10 @@ var Paddle = cc.Sprite.extend({
 
     onTouchBegan:function (touch, event) {
         var target = event.getCurrentTarget();
-        if (target._state != PADDLE_STATE_UNGRABBED) return false;
+        if (target._state != PLATFORM_STATE_UNGRABBED) return false;
         if (!target.containsTouchLocation(touch)) return false;
 
-        target._state = PADDLE_STATE_GRABBED;
+        target._state = PLATFORM_STATE_GRABBED;
         return true;
     },
     onTouchMoved:function (touch, event) {
@@ -81,7 +81,7 @@ var Paddle = cc.Sprite.extend({
         // Actually, it would be even more complicated since in the Cocos dispatcher
         // you get Array instead of 1 cc.Touch, so you'd need to loop through the set
         // in each touchXXX method.
-        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
+        cc.assert(target._state == PLATFORM_STATE_GRABBED, "Platform - Unexpected state!");
 
         var touchPoint = touch.getLocation();
         //touchPoint = cc.director.convertToGL( touchPoint );
@@ -90,17 +90,17 @@ var Paddle = cc.Sprite.extend({
     },
     onTouchEnded:function (touch, event) {
         var target = event.getCurrentTarget();
-        cc.assert(target._state == PADDLE_STATE_GRABBED, "Paddle - Unexpected state!");
-        target._state = PADDLE_STATE_UNGRABBED;
+        cc.assert(target._state == PLATFORM_STATE_GRABBED, "Platform - Unexpected state!");
+        target._state = PLATFORM_STATE_UNGRABBED;
     },
     touchDelegateRetain:function () {
     },
     touchDelegateRelease:function () {
     }
 });
-Paddle.paddleWithTexture = function (aTexture) {
-    var paddle = new Paddle();
-    paddle.initWithTexture(aTexture);
+Platform.platformWithTexture = function (aTexture) {
+    var platform = new Platform();
+    platform.initWithTexture(aTexture);
 
-    return paddle;
+    return platform;
 };

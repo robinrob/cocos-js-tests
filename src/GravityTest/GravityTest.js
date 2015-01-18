@@ -43,81 +43,66 @@ var GravityTestScene = TestScene.extend({
 });
 
 var PongLayer = cc.Layer.extend({
-    _ball:null,
-    _paddles:[],
-    _ballStartingVelocity:null,
+    _mass:null,
+    _platforms:[],
+    _massStartingVelocity:null,
     _winSize:null,
 
     ctor:function () {
         this._super();
-        this._ballStartingVelocity = cc.p(20.0, -100.0);
+        this._massStartingVelocity = cc.p(20.0, -100.0);
         this._winSize = cc.director.getWinSize();
 
-        this._ball = Mass.ballWithTexture(cc.textureCache.addImage(s_ball));
-        this._ball.x = this._winSize.width / 2;
-        this._ball.y = this._winSize.height / 2;
-        this._ball.setVelocity(this._ballStartingVelocity);
-        this.addChild(this._ball);
+        this._mass = Mass.massWithTexture(cc.textureCache.addImage(s_mass));
+        this._mass.x = this._winSize.width / 2;
+        this._mass.y = this._winSize.height / 2;
+        this._mass.setVelocity(this._massStartingVelocity);
+        this.addChild(this._mass);
 
-        var paddleTexture = cc.textureCache.addImage(s_paddle);
+        var platformTexture = cc.textureCache.addImage(s_platform);
 
-        this._paddles = [];
+        this._platforms = [];
 
-        var paddle = Paddle.paddleWithTexture(paddleTexture);
-        paddle.x = this._winSize.width / 2;
-        paddle.y = 15;
-        this._paddles.push(paddle);
+        var platform = Platform.platformWithTexture(platformTexture);
+        platform.x = this._winSize.width / 2;
+        platform.y = 15;
+        this._platforms.push(platform);
 
-        paddle = Paddle.paddleWithTexture(paddleTexture);
-        paddle.x = this._winSize.width / 2;
-        paddle.y = this._winSize.height - STATUS_BAR_HEIGHT - 15;
-        this._paddles.push(paddle);
-
-        paddle = Paddle.paddleWithTexture(paddleTexture);
-        paddle.x = this._winSize.width / 2;
-        paddle.y = 100;
-        this._paddles.push(paddle);
-
-        paddle = Paddle.paddleWithTexture(paddleTexture);
-        paddle.x = this._winSize.width / 2;
-        paddle.y = this._winSize.height - STATUS_BAR_HEIGHT - 100;
-        this._paddles.push(paddle);
-
-        for (var i = 0; i < this._paddles.length; i++) {
-            if (!this._paddles[i])
+        for (var i = 0; i < this._platforms.length; i++) {
+            if (!this._platforms[i])
                 break;
 
-            this.addChild(this._paddles[i]);
+            this.addChild(this._platforms[i]);
         }
 
         this.schedule(this.doStep);
     },
     resetAndScoreMassForPlayer:function (player) {
-        if (Math.abs(this._ball.getVelocity().y) < 300) {
-            this._ballStartingVelocity = cc.pMult(this._ballStartingVelocity, -1.1);
+        if (Math.abs(this._mass.getVelocity().y) < 300) {
+            this._massStartingVelocity = cc.pMult(this._massStartingVelocity, -1.1);
         } else {
-            this._ballStartingVelocity = cc.pMult(this._ballStartingVelocity, -1);
+            this._massStartingVelocity = cc.pMult(this._massStartingVelocity, -1);
         }
-        this._ball.setVelocity(this._ballStartingVelocity);
-        this._ball.x = this._winSize.width / 2;
-        this._ball.y = this._winSize.height / 2;
+        this._mass.setVelocity(this._massStartingVelocity);
+        this._mass.x = this._winSize.width / 2;
+        this._mass.y = this._winSize.height / 2;
 
         // TODO -- scoring
     },
     doStep:function (delta) {
-        this._ball.move(delta);
+        this._mass.move(delta);
 
-        for (var i = 0; i < this._paddles.length; i++) {
-            if (!this._paddles[i])
+        for (var i = 0; i < this._platforms.length; i++) {
+            if (!this._platforms[i])
                 break;
 
-            this._ball.collideWithPaddle(this._paddles[i]);
+            this._mass.collideWithPlatform(this._platforms[i]);
         }
 
-        if (this._ball.y > this._winSize.height - STATUS_BAR_HEIGHT + this._ball.radius())
+        if (this._mass.y > this._winSize.height - STATUS_BAR_HEIGHT + this._mass.radius())
             this.resetAndScoreMassForPlayer(LOW_PLAYER);
-        else if (this._ball.y < -this._ball.radius())
+        else if (this._mass.y < -this._mass.radius())
             this.resetAndScoreMassForPlayer(HIGH_PLAYER);
-        this._ball.draw();
+        this._mass.draw();
     }
 });

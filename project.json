@@ -32,7 +32,7 @@
         "src/TouchesTest/TouchesTest.js",
 
         "src/GravityTest/Mass.js",
-        "src/GravityTest/Paddle.js",
+        "src/GravityTest/Platform.js",
         "src/GravityTest/GravityTest.js",
 
 
