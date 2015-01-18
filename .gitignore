@@ -16,6 +16,8 @@ src/*
 !src/GravityTest/
 
 
+# This whole rigmarole is necessary in order to iginore e.g.
+# project/proj.android/AndroidManifest.xml
 !project/
 project/*
 
