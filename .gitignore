@@ -14,3 +14,12 @@
 src/*
 # Don't ignore these!
 !src/GravityTest/
+
+
+!project/
+project/*
+
+!project/proj.android/
+project/proj.android/*
+
+!project/proj.android/AndroidManifest.xml
